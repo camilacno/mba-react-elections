@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+// @ts-expect-error
 import { Heading, Text, VStack, HStack, Flex, Grid } from '@chakra-ui/react'
+import { useState, useEffect } from 'react'
 
 import { api } from './lib/axios'
 
@@ -7,10 +8,31 @@ import { CitySelector } from './components/CitySelector'
 import { formatNumber } from './helpers'
 import { CandidateCard } from './components/CandidateCard'
 
+type CityProps = {
+  id: string
+  name: string
+  votingPopulation: number
+  absence: number
+  presence: number
+}
+
+type ElectionProps = {
+  id: string
+  cityId: string
+  candidateId: string
+  votes: number
+}
+
+type CandidatesProps = {
+  id: string
+  name: string
+  username: number
+}
+
 function ElectionResults() {
-  const [elections, setElections] = useState([])
-  const [candidates, setCandidates] = useState([])
-  const [cities, setCities] = useState([])
+  const [elections, setElections] = useState<ElectionProps[]>([])
+  const [candidates, setCandidates] = useState<CandidatesProps[]>([])
+  const [cities, setCities] = useState<CityProps[]>([])
   const [selectedCityId, setSelectedCityId] = useState('')
 
   async function fetchElections() {

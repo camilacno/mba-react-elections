@@ -1,7 +1,32 @@
+// @ts-expect-error
 import { Avatar, Card, Flex, Text, VStack } from '@chakra-ui/react'
 import { formatNumber } from '../helpers'
 
-export function CandidateCard({ election, candidate, elected, percentage }) {
+type ElectionProps = {
+  id: string
+  cityId: string
+  candidateId: string
+  votes: number
+}
+
+type CandidatesProps = {
+  id: string
+  name: string
+  username: number
+}
+
+type CandidateCardProps = {
+  election: ElectionProps
+  candidate: CandidatesProps
+  elected: string
+  percentage: number
+}
+export function CandidateCard({
+  election,
+  candidate,
+  elected,
+  percentage,
+}: CandidateCardProps) {
   return (
     <Card
       variant="elevated"

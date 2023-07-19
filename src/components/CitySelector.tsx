@@ -1,4 +1,29 @@
+// @ts-expect-error
 import { Flex, Select, Text } from '@chakra-ui/react'
+
+// @ts-expect-error
+import { styled } from 'styled-components'
+
+type CityProps = {
+  id: string
+  name: string
+  votingPopulation: number
+  absence: number
+  presence: number
+}
+
+type ElectionProps = {
+  id: string
+  cityId: string
+  candidateId: string
+  votes: number
+}
+
+type CandidatesProps = {
+  id: string
+  name: string
+  username: number
+}
 
 export function CitySelector({ selectedCityId, cities, setSelectedCityId }) {
   return (
@@ -13,13 +38,15 @@ export function CitySelector({ selectedCityId, cities, setSelectedCityId }) {
         value={selectedCityId}
         onChange={(e) => setSelectedCityId(e.target.value)}
       >
-        <option value="">--Selecione uma cidade--</option>
+        <Option value="">--Selecione uma cidade--</Option>
         {cities.map((city) => (
-          <option key={city.id} value={city.id}>
+          <Option key={city.id} value={city.id}>
             {city.name}
-          </option>
+          </Option>
         ))}
       </Select>
     </Flex>
   )
 }
+
+export const Option = styled.option``

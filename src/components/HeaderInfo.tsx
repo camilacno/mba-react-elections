@@ -1,6 +1,17 @@
+// @ts-expect-error
 import { Text } from '@chakra-ui/react'
 
-export function HeaderInfo({ title, elections, selectedCity }) {
+interface HeaderInfoProps {
+  title: string
+  elections: { cityId: string }[]
+  selectedCity: { id: string }
+}
+
+export function HeaderInfo({
+  title,
+  elections,
+  selectedCity,
+}: HeaderInfoProps) {
   return (
     <>
       {' '}
