@@ -9,6 +9,8 @@ import {
   VStack,
   HStack,
   Flex,
+  Grid,
+  Card,
 } from '@chakra-ui/react'
 
 function ElectionResults() {
@@ -69,7 +71,7 @@ function ElectionResults() {
       {selectedCity && (
         <>
           <Heading textAlign="center" my={10} size="lg">
-            {selectedCity.name}
+            Eleição em {selectedCity.name}
           </Heading>
           <HStack
             px={8}
@@ -78,8 +80,10 @@ function ElectionResults() {
             justifyContent="space-around"
           >
             <VStack>
-              <Text>Candidatos</Text>
-              <Text>
+              <Text fontSize="sm" fontWeight="semibold">
+                Candidatos
+              </Text>
+              <Text fontSize="sm" fontWeight="thin">
                 {
                   elections.filter(
                     (election) => election.cityId === selectedCity.id
@@ -88,53 +92,94 @@ function ElectionResults() {
               </Text>
             </VStack>
             <VStack>
-              <Text>Total de eleitores</Text>
-              <Text>{formatNumber(selectedCity.votingPopulation)}</Text>
+              <Text fontSize="sm" fontWeight="semibold">
+                Total de eleitores
+              </Text>
+              <Text fontSize="sm" fontWeight="thin">
+                {formatNumber(selectedCity.votingPopulation)}
+              </Text>
             </VStack>
             <VStack>
-              <Text>Comparecimento</Text>
-              <Text>{formatNumber(selectedCity.presence)}</Text>
+              <Text fontSize="sm" fontWeight="semibold">
+                Comparecimento
+              </Text>
+              <Text fontSize="sm" fontWeight="thin">
+                {formatNumber(selectedCity.presence)}
+              </Text>
             </VStack>
             <VStack>
-              <Text>Abstenções</Text>
-              <Text>{formatNumber(selectedCity.absence)}</Text>
+              <Text fontSize="sm" fontWeight="semibold">
+                Abstenções
+              </Text>
+              <Text fontSize="sm" fontWeight="thin">
+                {formatNumber(selectedCity.absence)}
+              </Text>
             </VStack>
           </HStack>
 
-          {elections
-            .filter((election) => election.cityId === selectedCity.id)
-            .map((election) => {
-              const candidate = candidates.find(
-                (candidate) => candidate.id === election.candidateId
-              )
-              const percentage = (election.votes / selectedCity.presence) * 100
-              const elected =
-                election.votes ===
-                Math.max(
-                  ...elections
-                    .filter((e) => e.cityId === selectedCity.id)
-                    .map((e) => e.votes)
+          <Grid
+            templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+            gap={6}
+            mx="auto"
+            px={8}
+            py={4}
+            justifyContent="center"
+          >
+            {elections
+              .filter((election) => election.cityId === selectedCity.id)
+              .map((election) => {
+                const candidate = candidates.find(
+                  (candidate) => candidate.id === election.candidateId
                 )
-              return (
-                <Box
-                  key={election.candidateId}
-                  p={4}
-                  borderWidth={1}
-                  borderRadius={8}
-                >
-                  <HStack spacing={4}>
-                    <Flex></Flex>
-                    <Avatar src={`/img/${candidate.username}.png`} />
-                    <Text>{percentage.toFixed(2)}%</Text>
-                    <Text>Votos: {formatNumber(election.votes)}</Text>
-                    <Text>Nome: {candidate.name}</Text>
-                    <Text color={elected ? 'green' : 'orange'}>
-                      {elected ? 'Eleito' : 'Não eleito'}
-                    </Text>
-                  </HStack>
-                </Box>
-              )
-            })}
+                const percentage =
+                  (election.votes / selectedCity.presence) * 100
+                const elected =
+                  election.votes ===
+                  Math.max(
+                    ...elections
+                      .filter((e) => e.cityId === selectedCity.id)
+                      .map((e) => e.votes)
+                  )
+                return (
+                  <Card
+                    variant="elevated"
+                    key={election.candidateId}
+                    p={4}
+                    borderRadius={4}
+                    w={300}
+                  >
+                    <VStack spacing={4}>
+                      <Flex
+                        w="100%"
+                        px={3}
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Avatar src={`/img/${candidate.username}.png`} />
+                        <VStack align="end" gap={0}>
+                          <Text fontSize="sm" fontWeight="bold">
+                            {percentage.toFixed(2)}%
+                          </Text>
+                          <Text fontSize="sm" fontWeight="bold">
+                            {formatNumber(election.votes)} votos
+                          </Text>
+                        </VStack>
+                      </Flex>
+                      <Text fontSize="lg" fontWeight="bold">
+                        {candidate.name}
+                      </Text>
+                      <Text
+                        fontSize="sm"
+                        fontWeight="bold"
+                        color={elected ? 'green' : 'orange'}
+                      >
+                        {elected ? 'Eleito' : 'Não eleito'}
+                      </Text>
+                    </VStack>
+                  </Card>
+                )
+              })}
+          </Grid>
         </>
       )}
     </Flex>
