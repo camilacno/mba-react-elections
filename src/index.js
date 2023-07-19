@@ -1,17 +1,47 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+/**
+ * Importação do módulo principal do React.
+ * A partir da versão 17.x, não é mais obrigatório
+ * para criar componentes. Entretanto, a importação
+ * é necessária neste arquivo pois "React" é de fato
+ * utilizado com StrictMode
+ */
+import React from "react";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+/**
+ * Este é o módulo do React que renderiza HTML.
+ * Em mobile temos, por exemplo, o react-native
+ */
+import ReactDOM from "react-dom";
+
+/**
+ * Importação do componente principal
+ * da aplicação
+ */
+import App from "./App";
+
+/**
+ * Este arquivo pode ser considerado o CSS
+ * Global do App. Perceba a peculiaridade da
+ * sintaxe de importação
+ */
+import "./index.css";
+
+/**
+ * <React.StrictMode> é utilizado na fase
+ * de "Desenvolvimento" gerando mais mensagens
+ * de erro para apoiar o Desenvolvedor. Por isso
+ * é comum ocorrerem renderizações "a mais".
+ * Ele é retirado automaticamente em produção.
+ */
+
+import { ChakraProvider } from "@chakra-ui/react";
+import theme from "./theme";
+
+ReactDOM.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <ChakraProvider theme={theme}>
+      <App />
+    </ChakraProvider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
