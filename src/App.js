@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import {
-  Box,
-  Heading,
-  Text,
-  Select,
-  Avatar,
-  VStack,
-  HStack,
-  Flex,
-  Grid,
-  Card,
-} from '@chakra-ui/react'
+import { Heading, Text, VStack, HStack, Flex, Grid } from '@chakra-ui/react'
+
+import { api } from './lib/axios'
+
+import { CitySelector } from './components/CitySelector'
+import { formatNumber } from './helpers'
+import { CandidateCard } from './components/CandidateCard'
 
 function ElectionResults() {
   const [elections, setElections] = useState([])
@@ -19,22 +13,18 @@ function ElectionResults() {
   const [cities, setCities] = useState([])
   const [selectedCityId, setSelectedCityId] = useState('')
 
-  function formatNumber(value) {
-    return new Intl.NumberFormat('pt-BR').format(value)
-  }
-
   async function fetchElections() {
-    const response = await axios.get('http://localhost:3001/election')
+    const response = await api.get('/election')
     setElections(response.data)
   }
 
   async function fetchCandidates() {
-    const response = await axios.get('http://localhost:3001/candidates')
+    const response = await api.get('/candidates')
     setCandidates(response.data)
   }
 
   async function fetchCities() {
-    const response = await axios.get('http://localhost:3001/cities')
+    const response = await api.get('/cities')
     setCities(response.data)
   }
 
@@ -48,31 +38,18 @@ function ElectionResults() {
 
   return (
     <Flex flexDir="column" py={8}>
-      <Flex alignItems="center" justifyContent="center">
-        <Text fontSize="large" fontWeight="bold" mr={2}>
-          Selecione uma cidade:
-        </Text>
-        <Select
-          width="30%"
-          variant="filled"
-          id="city-select"
-          value={selectedCityId}
-          onChange={(e) => setSelectedCityId(e.target.value)}
-        >
-          <option value="">--Selecione uma cidade--</option>
-          {cities.map((city) => (
-            <option key={city.id} value={city.id}>
-              {city.name}
-            </option>
-          ))}
-        </Select>
-      </Flex>
+      <CitySelector
+        cities={cities}
+        selectedCityId={selectedCityId}
+        setSelectedCityId={setSelectedCityId}
+      />
 
       {selectedCity && (
         <>
           <Heading textAlign="center" my={10} size="lg">
             Eleição em {selectedCity.name}
           </Heading>
+
           <HStack
             px={8}
             mb={10}
@@ -118,9 +95,8 @@ function ElectionResults() {
           </HStack>
 
           <Grid
-            templateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+            templateColumns="repeat(auto-fit, minmax(220px, 1fr))"
             gap={6}
-            mx="auto"
             px={8}
             py={4}
             justifyContent="center"
@@ -141,42 +117,12 @@ function ElectionResults() {
                       .map((e) => e.votes)
                   )
                 return (
-                  <Card
-                    variant="elevated"
-                    key={election.candidateId}
-                    p={4}
-                    borderRadius={4}
-                    w={300}
-                  >
-                    <VStack spacing={4}>
-                      <Flex
-                        w="100%"
-                        px={3}
-                        alignItems="center"
-                        justifyContent="space-between"
-                      >
-                        <Avatar src={`/img/${candidate.username}.png`} />
-                        <VStack align="end" gap={0}>
-                          <Text fontSize="sm" fontWeight="bold">
-                            {percentage.toFixed(2)}%
-                          </Text>
-                          <Text fontSize="sm" fontWeight="bold">
-                            {formatNumber(election.votes)} votos
-                          </Text>
-                        </VStack>
-                      </Flex>
-                      <Text fontSize="lg" fontWeight="bold">
-                        {candidate.name}
-                      </Text>
-                      <Text
-                        fontSize="sm"
-                        fontWeight="bold"
-                        color={elected ? 'green' : 'orange'}
-                      >
-                        {elected ? 'Eleito' : 'Não eleito'}
-                      </Text>
-                    </VStack>
-                  </Card>
+                  <CandidateCard
+                    candidate={candidate}
+                    elected={elected}
+                    election={election}
+                    percentage={percentage}
+                  />
                 )
               })}
           </Grid>
