@@ -1,7 +1,5 @@
 import { Flex, Select, Text } from '@chakra-ui/react'
 
-import { styled } from 'styled-components'
-
 type CityProps = {
   id: string
   name: string
@@ -30,15 +28,13 @@ export function CitySelector({
         value={selectedCityId}
         onChange={(e) => setSelectedCityId(e.target.value)}
       >
-        <Option value="">--Selecione uma cidade--</Option>
+        <option value="">--Selecione uma cidade--</option>
         {cities.map((city) => (
-          <Option key={city.id} value={city.id}>
+          <option key={city.id} value={city.id}>
             {city.name}
-          </Option>
+          </option>
         ))}
       </Select>
     </Flex>
   )
 }
-
-export const Option = styled.option``
