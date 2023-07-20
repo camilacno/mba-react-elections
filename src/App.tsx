@@ -1,60 +1,76 @@
-import { useState, useEffect } from 'react'
-import { Heading, HStack, Flex, Grid } from '@chakra-ui/react'
+import { useState, useEffect } from "react";
+import { Heading, HStack, Flex, Grid } from "@chakra-ui/react";
 
-import { api } from './services/api'
+import { api } from "./services/api";
 
-import { CitySelector, CandidateCard, HeaderInfoCard } from './components/index'
-import { formatNumber } from './helpers'
+import {
+  CitySelector,
+  CandidateCard,
+  HeaderInfoCard,
+} from "./components/index";
+import { formatNumber } from "./helpers";
 
 type CityProps = {
-  id: string
-  name: string
-  votingPopulation: number
-  absence: number
-  presence: number
-}
+  id: string;
+  name: string;
+  votingPopulation: number;
+  absence: number;
+  presence: number;
+};
 
 type ElectionProps = {
-  id: string
-  cityId: string
-  candidateId: string
-  votes: number
-}
+  id: string;
+  cityId: string;
+  candidateId: string;
+  votes: number;
+};
 
 type CandidateProps = {
-  id: string
-  username: string
-  name: string
-}
+  id: string;
+  username: string;
+  name: string;
+};
 
 function ElectionResults() {
-  const [elections, setElections] = useState<ElectionProps[]>([])
-  const [candidates, setCandidates] = useState<CandidateProps[]>([])
-  const [cities, setCities] = useState<CityProps[]>([])
-  const [selectedCityId, setSelectedCityId] = useState('')
+  const [elections, setElections] = useState<ElectionProps[]>([]);
+  const [candidates, setCandidates] = useState<CandidateProps[]>([]);
+  const [cities, setCities] = useState<CityProps[]>([]);
+  const [selectedCityId, setSelectedCityId] = useState("");
 
   async function fetchElections() {
-    const response = await api.get('/election')
-    setElections(response.data)
+    try {
+      const response = await api.get("/election");
+      setElections(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function fetchCandidates() {
-    const response = await api.get('/candidates')
-    setCandidates(response.data)
+    try {
+      const response = await api.get("/candidates");
+      setCandidates(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function fetchCities() {
-    const response = await api.get('/cities')
-    setCities(response.data)
+    try {
+      const response = await api.get("/cities");
+      setCities(response.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
-    fetchElections()
-    fetchCandidates()
-    fetchCities()
-  }, [])
+    fetchElections();
+    fetchCandidates();
+    fetchCities();
+  }, []);
 
-  const selectedCity = cities.find((city) => city.id === selectedCityId)
+  const selectedCity = cities.find((city) => city.id === selectedCityId);
 
   return (
     <Flex flexDir="column" py={8}>
@@ -118,16 +134,16 @@ function ElectionResults() {
               .map((election) => {
                 const candidate = candidates.find(
                   (candidate) => candidate.id === election.candidateId
-                )
+                );
                 const percentage =
-                  (election.votes / selectedCity.presence) * 100
+                  (election.votes / selectedCity.presence) * 100;
                 const elected =
                   election.votes ===
                   Math.max(
                     ...elections
                       .filter((e) => e.cityId === selectedCity.id)
                       .map((e) => e.votes)
-                  )
+                  );
                 return (
                   <CandidateCard
                     key={candidate?.id}
@@ -136,13 +152,13 @@ function ElectionResults() {
                     election={election}
                     percentage={percentage}
                   />
-                )
+                );
               })}
           </Grid>
         </>
       )}
     </Flex>
-  )
+  );
 }
 
-export default ElectionResults
+export default ElectionResults;
