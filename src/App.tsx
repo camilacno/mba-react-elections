@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Heading, Text, VStack, HStack, Flex, Grid } from '@chakra-ui/react'
+import { Heading, HStack, Flex, Grid } from '@chakra-ui/react'
 
 import { api } from './services/api'
 

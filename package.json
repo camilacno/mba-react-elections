@@ -5,6 +5,7 @@
   "dependencies": {
     "@chakra-ui/react": "2.8.0",
     "@craco/craco": "7.1.0",
+    "@emotion/babel-preset-css-prop": "11.11.0",
     "@fontsource/open-sans": "5.0.5",
     "@fontsource/poppins": "5.0.5",
     "@fontsource/raleway": "5.0.5",
