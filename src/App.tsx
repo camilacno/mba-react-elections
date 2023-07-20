@@ -3,7 +3,7 @@ import { Heading, Text, VStack, HStack, Flex, Grid } from '@chakra-ui/react'
 
 import { api } from './services/api'
 
-import { CitySelector, CandidateCard } from './components/index'
+import { CitySelector, CandidateCard, HeaderInfoCard } from './components/index'
 import { formatNumber } from './helpers'
 
 type CityProps = {
@@ -84,42 +84,26 @@ function ElectionResults() {
             justifyContent="center"
             gap="5rem"
           >
-            <VStack bg="gray.50" borderRadius={5} p={4}>
-              <Text fontSize="sm" fontWeight="semibold">
-                Candidatos
-              </Text>
-              <Text fontSize="sm" fontWeight="thin">
-                {
-                  elections.filter(
-                    (election) => election.cityId === selectedCity.id
-                  ).length
-                }
-              </Text>
-            </VStack>
-            <VStack bg="gray.50" borderRadius={5} p={4}>
-              <Text fontSize="sm" fontWeight="semibold">
-                Total de eleitores
-              </Text>
-              <Text fontSize="sm" fontWeight="thin">
-                {formatNumber(selectedCity.votingPopulation)}
-              </Text>
-            </VStack>
-            <VStack bg="gray.50" borderRadius={5} p={4}>
-              <Text fontSize="sm" fontWeight="semibold">
-                Comparecimento
-              </Text>
-              <Text fontSize="sm" fontWeight="thin">
-                {formatNumber(selectedCity.presence)}
-              </Text>
-            </VStack>
-            <VStack bg="gray.50" borderRadius={5} p={4}>
-              <Text fontSize="sm" fontWeight="semibold">
-                Abstenções
-              </Text>
-              <Text fontSize="sm" fontWeight="thin">
-                {formatNumber(selectedCity.absence)}
-              </Text>
-            </VStack>
+            <HeaderInfoCard
+              title="Candidatos"
+              value={
+                elections.filter(
+                  (election) => election.cityId === selectedCity.id
+                ).length
+              }
+            />
+            <HeaderInfoCard
+              title="Total de eleitores"
+              value={formatNumber(selectedCity.votingPopulation)}
+            />
+            <HeaderInfoCard
+              title="Comparecimento"
+              value={formatNumber(selectedCity.presence)}
+            />
+            <HeaderInfoCard
+              title="Abstenções"
+              value={formatNumber(selectedCity.absence)}
+            />
           </HStack>
 
           <Grid
