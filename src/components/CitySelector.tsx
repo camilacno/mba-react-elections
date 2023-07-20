@@ -1,31 +1,23 @@
-// @ts-expect-error
 import { Flex, Select, Text } from '@chakra-ui/react'
 
-// @ts-expect-error
 import { styled } from 'styled-components'
 
 type CityProps = {
   id: string
   name: string
-  votingPopulation: number
-  absence: number
-  presence: number
 }
 
-type ElectionProps = {
-  id: string
-  cityId: string
-  candidateId: string
-  votes: number
+type CitySelectorPops = {
+  selectedCityId: string
+  cities: CityProps[]
+  setSelectedCityId: (id: string) => void
 }
 
-type CandidatesProps = {
-  id: string
-  name: string
-  username: number
-}
-
-export function CitySelector({ selectedCityId, cities, setSelectedCityId }) {
+export function CitySelector({
+  selectedCityId,
+  cities,
+  setSelectedCityId,
+}: CitySelectorPops) {
   return (
     <Flex alignItems="center" justifyContent="center">
       <Text fontSize="large" fontWeight="bold" mr={2}>

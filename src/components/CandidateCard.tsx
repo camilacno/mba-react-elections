@@ -1,24 +1,21 @@
-// @ts-expect-error
 import { Avatar, Card, Flex, Text, VStack } from '@chakra-ui/react'
 import { formatNumber } from '../helpers'
 
 type ElectionProps = {
-  id: string
-  cityId: string
   candidateId: string
   votes: number
 }
 
-type CandidatesProps = {
-  id: string
+type CandidateProps = {
   name: string
-  username: number
+  username: string
+  id: string
 }
 
 type CandidateCardProps = {
   election: ElectionProps
-  candidate: CandidatesProps
-  elected: string
+  candidate?: CandidateProps
+  elected: boolean
   percentage: number
 }
 export function CandidateCard({
@@ -28,45 +25,50 @@ export function CandidateCard({
   percentage,
 }: CandidateCardProps) {
   return (
-    <Card
-      variant="elevated"
-      key={election.candidateId}
-      p={4}
-      borderRadius={4}
-      w={220}
-    >
-      <VStack spacing={4}>
-        <Flex
-          w="100%"
-          px={3}
-          alignItems="center"
-          justifyContent="space-between"
+    <>
+      {candidate && (
+        <Card
+          variant="elevated"
+          key={election.candidateId}
+          p={4}
+          borderRadius={4}
+          w={220}
+          bg="gray.50"
         >
-          <Avatar src={`/img/${candidate.username}.png`} />
-          <VStack align="end" gap={0}>
+          <VStack spacing={4}>
+            <Flex
+              w="100%"
+              px={3}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Avatar src={`/img/${candidate?.username}.png`} />
+              <VStack align="end" gap={0}>
+                <Text
+                  color={elected ? 'green' : 'orange'}
+                  fontSize="sm"
+                  fontWeight="bold"
+                >
+                  {percentage.toFixed(2)}%
+                </Text>
+                <Text fontSize="sm" fontWeight="bold">
+                  {formatNumber(election.votes)} votos
+                </Text>
+              </VStack>
+            </Flex>
+            <Text fontSize="lg" fontWeight="bold">
+              {candidate?.name}
+            </Text>
             <Text
-              color={elected ? 'green' : 'orange'}
               fontSize="sm"
               fontWeight="bold"
+              color={elected ? 'green' : 'orange'}
             >
-              {percentage.toFixed(2)}%
-            </Text>
-            <Text fontSize="sm" fontWeight="bold">
-              {formatNumber(election.votes)} votos
+              {elected ? 'Eleito' : 'Não eleito'}
             </Text>
           </VStack>
-        </Flex>
-        <Text fontSize="lg" fontWeight="bold">
-          {candidate.name}
-        </Text>
-        <Text
-          fontSize="sm"
-          fontWeight="bold"
-          color={elected ? 'green' : 'orange'}
-        >
-          {elected ? 'Eleito' : 'Não eleito'}
-        </Text>
-      </VStack>
-    </Card>
+        </Card>
+      )}
+    </>
   )
 }

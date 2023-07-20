@@ -1,12 +1,10 @@
-// @ts-expect-error
-import { Heading, Text, VStack, HStack, Flex, Grid } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
+import { Heading, Text, VStack, HStack, Flex, Grid } from '@chakra-ui/react'
 
-import { api } from './lib/axios'
+import { api } from './services/api'
 
-import { CitySelector } from './components/CitySelector'
+import { CitySelector, CandidateCard } from './components/index'
 import { formatNumber } from './helpers'
-import { CandidateCard } from './components/CandidateCard'
 
 type CityProps = {
   id: string
@@ -23,15 +21,15 @@ type ElectionProps = {
   votes: number
 }
 
-type CandidatesProps = {
+type CandidateProps = {
   id: string
+  username: string
   name: string
-  username: number
 }
 
 function ElectionResults() {
   const [elections, setElections] = useState<ElectionProps[]>([])
-  const [candidates, setCandidates] = useState<CandidatesProps[]>([])
+  const [candidates, setCandidates] = useState<CandidateProps[]>([])
   const [cities, setCities] = useState<CityProps[]>([])
   const [selectedCityId, setSelectedCityId] = useState('')
 
@@ -68,7 +66,14 @@ function ElectionResults() {
 
       {selectedCity && (
         <>
-          <Heading textAlign="center" my={10} size="lg">
+          <Heading
+            textAlign="center"
+            my={10}
+            size="lg"
+            bg="teal.500"
+            py={3}
+            color="white"
+          >
             Eleição em {selectedCity.name}
           </Heading>
 
@@ -76,9 +81,10 @@ function ElectionResults() {
             px={8}
             mb={10}
             alignItems="center"
-            justifyContent="space-around"
+            justifyContent="center"
+            gap="5rem"
           >
-            <VStack>
+            <VStack bg="gray.50" borderRadius={5} p={4}>
               <Text fontSize="sm" fontWeight="semibold">
                 Candidatos
               </Text>
@@ -90,7 +96,7 @@ function ElectionResults() {
                 }
               </Text>
             </VStack>
-            <VStack>
+            <VStack bg="gray.50" borderRadius={5} p={4}>
               <Text fontSize="sm" fontWeight="semibold">
                 Total de eleitores
               </Text>
@@ -98,7 +104,7 @@ function ElectionResults() {
                 {formatNumber(selectedCity.votingPopulation)}
               </Text>
             </VStack>
-            <VStack>
+            <VStack bg="gray.50" borderRadius={5} p={4}>
               <Text fontSize="sm" fontWeight="semibold">
                 Comparecimento
               </Text>
@@ -106,7 +112,7 @@ function ElectionResults() {
                 {formatNumber(selectedCity.presence)}
               </Text>
             </VStack>
-            <VStack>
+            <VStack bg="gray.50" borderRadius={5} p={4}>
               <Text fontSize="sm" fontWeight="semibold">
                 Abstenções
               </Text>
@@ -140,6 +146,7 @@ function ElectionResults() {
                   )
                 return (
                   <CandidateCard
+                    key={candidate?.id}
                     candidate={candidate}
                     elected={elected}
                     election={election}
